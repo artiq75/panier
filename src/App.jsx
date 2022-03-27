@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Cart } from './components/Cart'
+import { Product } from './components/Product'
 
 const BASE_URL_API = import.meta.env.VITE_BASE_URL_API
 
@@ -42,62 +44,14 @@ function App() {
       <fieldset>
         <legend>Panier:</legend>
         {cart.length > 0 && (
-          <>
-            <ul>
-              {cart.map((product) => (
-                <li key={product.id}>
-                  <CartItem product={product} onRemove={handleRemove} />
-                </li>
-              ))}
-            </ul>
-            <button onClick={handleClean}>Supprimer tous les produits</button>
-          </>
+          <Cart products={cart} onRemove={handleRemove} onClean={handleClean} />
         )}
       </fieldset>
       <fieldset>
         <legend>Produits:</legend>
-        <ul>
-          {products.map((product) => (
-            <li key={product.id}>
-              <ProductItem product={product} onAdd={handleAdd} />
-            </li>
-          ))}
-        </ul>
+        <Product products={products} onAdd={handleAdd} />
       </fieldset>
     </>
-  )
-}
-
-export function CartItem({ product, onRemove }) {
-  const handleRemove = function () {
-    onRemove(product)
-  }
-
-  return (
-    <article>
-      <p>
-        {product.title}
-        <br />
-        quantité: {product.quantity}
-      </p>
-      <button onClick={handleRemove}>supprimer</button>
-    </article>
-  )
-}
-
-export function ProductItem({ product, onAdd }) {
-  const handleAdd = function () {
-    onAdd(product)
-  }
-
-  return (
-    <article>
-      <h2>{product.title}</h2>
-      <p>
-        <strong>{product.price} €</strong>
-      </p>
-      <button onClick={handleAdd}>Ajouter au panier</button>
-    </article>
   )
 }
 
