@@ -1,9 +1,11 @@
-import { useState, useReducer, useEffect } from 'react'
+import { createContext, useState, useReducer, useEffect, useMemo } from 'react'
 import { cartReducer } from './cartReducer'
 import { Cart } from './components/Cart'
 import { Product } from './components/Product'
 
 const BASE_URL_API = import.meta.env.VITE_BASE_URL_API
+
+export const CartContext = createContext()
 
 function App() {
   const [products, setProducts] = useState([])
@@ -15,6 +17,13 @@ function App() {
       .then((products) => setProducts(products))
   }, [])
 
+  const value = useMemo(() => {
+    return {
+      cart,
+      dispatch,
+    }
+  }, [cart])
+
   return (
     <>
       <fieldset>
@@ -23,7 +32,9 @@ function App() {
       </fieldset>
       <fieldset>
         <legend>Produits:</legend>
-        <Product products={products} cart={cart} dispatch={dispatch} />
+        <CartContext.Provider value={value}>
+          <Product products={products} />
+        </CartContext.Provider>
       </fieldset>
     </>
   )
