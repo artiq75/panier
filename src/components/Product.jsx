@@ -1,18 +1,23 @@
-export function Product({ products, onAdd }) {
+export function Product({ products, cart, dispatch }) {
   return (
     <ul>
       {products.map((product) => (
         <li key={product.id}>
-          <ProductItem product={product} onAdd={onAdd} />
+          <ProductItem product={product} cart={cart} dispatch={dispatch} />
         </li>
       ))}
     </ul>
   )
 }
 
-function ProductItem({ product, onAdd }) {
+function ProductItem({ product, cart, dispatch }) {
   const handleAdd = function () {
-    onAdd(product)
+    let type = 'ADD'
+    const isAdded = cart.some((item) => item.id === product.id)
+    if (isAdded) {
+      type = 'INCREASE'
+    }
+    dispatch({ type, payload: product })
   }
 
   return (
